@@ -89,6 +89,25 @@ public class Main
         return headers.with(header);
     }
 
+    public static final Resource createResponse(Resource request, ClientResponse cr)
+    {
+        Resource response = request.getModel().createResource().
+                addLiteral(HTTPinRDF.statusCodeValue, cr.getStatusInfo().getStatusCode()).
+                addLiteral(HTTPinRDF.reasonPhrase, cr.getStatusInfo().getReasonPhrase());
+
+        RDFList respHeaders = response.getModel().createList();
+        MultivaluedMap<String, String> respHeadersMap = cr.getHeaders();
+        Iterator<Entry<String, List<String>>> respHeaderIt = respHeadersMap.entrySet().iterator();
+        while (respHeaderIt.hasNext())
+        {
+            Entry<String, List<String>> entry = respHeaderIt.next();
+            String header = entry.getKey();
+            for (String value : entry.getValue())
+                respHeaders = withResponseHeader(respHeaders, header, value);
+        }
+
+        return response.addProperty(HTTPinRDF.headers, respHeaders);
+    }
     
     public static final Resource execute(Client client, Resource request) throws URISyntaxException
     {
@@ -128,22 +147,7 @@ public class Main
             }
             cr = resource.accept(accept).get(ClientResponse.class);
 
-            Resource response = request.getModel().createResource().
-                    addLiteral(HTTPinRDF.statusCodeValue, cr.getStatusInfo().getStatusCode()).
-                    addLiteral(HTTPinRDF.reasonPhrase, cr.getStatusInfo().getReasonPhrase());
-                    
-            RDFList respHeaders = response.getModel().createList();
-            MultivaluedMap<String, String> respHeadersMap = cr.getHeaders();
-            Iterator<Entry<String, List<String>>> respHeaderIt = respHeadersMap.entrySet().iterator();
-            while (respHeaderIt.hasNext())
-            {
-                Entry<String, List<String>> entry = respHeaderIt.next();
-                String header = entry.getKey();
-                for (String value : entry.getValue())
-                    respHeaders = withResponseHeader(respHeaders, header, value);
-            }
-            
-            return response.addProperty(HTTPinRDF.headers, respHeaders);
+            return createResponse(request, cr);
         }
         finally
         {
