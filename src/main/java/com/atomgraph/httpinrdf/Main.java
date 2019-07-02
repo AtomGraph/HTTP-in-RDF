@@ -92,8 +92,8 @@ public class Main
     public static final Resource createResponse(Resource request, ClientResponse cr)
     {
         Resource response = request.getModel().createResource().
-                addLiteral(HTTPinRDF.statusCodeValue, cr.getStatusInfo().getStatusCode()).
-                addLiteral(HTTPinRDF.reasonPhrase, cr.getStatusInfo().getReasonPhrase());
+            addLiteral(HTTPinRDF.statusCodeValue, cr.getStatusInfo().getStatusCode()).
+            addLiteral(HTTPinRDF.reasonPhrase, cr.getStatusInfo().getReasonPhrase());
 
         RDFList respHeaders = response.getModel().createList();
         MultivaluedMap<String, String> respHeadersMap = cr.getHeaders();
