@@ -60,6 +60,7 @@ public class Main
         Resource request = conn.getModel().createResource().
             addProperty(RDF.type, HTTPinRDF.Request).
             addProperty(HTTPinRDF.mthd, ResourceFactory.createResource("http://www.w3.org/2011/http-methods#" + method)).
+            addLiteral(HTTPinRDF.httpVersion, "1.1").
             addLiteral(HTTPinRDF.methodName, method).
             addLiteral(HTTPinRDF.absolutePath, path);
 

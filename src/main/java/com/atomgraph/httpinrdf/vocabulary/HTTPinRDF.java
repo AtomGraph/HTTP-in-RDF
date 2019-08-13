@@ -55,6 +55,8 @@ public class HTTPinRDF
     
     public static final OntClass ResponseHeader = m_model.createClass( NS + "ResponseHeader" );
 
+    public static final DatatypeProperty httpVersion = m_model.createDatatypeProperty( NS + "httpVersion" );
+    
     public static final ObjectProperty mthd = m_model.createObjectProperty( NS + "mthd" );
     
     public static final ObjectProperty requests = m_model.createObjectProperty( NS + "requests" );
